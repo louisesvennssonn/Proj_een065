@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>New Infront</h1>
+    <h2>Welcome to New Infront, please select a stock to read or add an analysis.</h2>
+    <form action="/action_page.php">
+        <div>
+            <label for="stocks">Choose a stock:</label>
+            <select id="stocks" name="stocks">
+                <option value="select">Select...</option>
+                <option value="investor">Investor</option>
+            </select>
+        </div>
+    </form>
+    <!-- TODO: make sure to put your content here. -->
+{% endblock content %}
