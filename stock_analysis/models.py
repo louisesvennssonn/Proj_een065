@@ -39,7 +39,7 @@ class Analysis(db.Model):
     price = db.Column(db.Float, nullable=False)
     earnings = db.Column(db.Float, nullable=False)
     p_e = db.Column(db.Float, nullable=False, default=price/earnings)
-    market_cap = db.Column(db.Float, nullable=False)
+    market_cap = db.Column(db.Float, nullable=False, default=price*Stock.number_of_shares)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship(User, backref=db.backref('analyses', lazy=True))

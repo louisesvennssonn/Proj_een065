@@ -70,29 +70,30 @@ def reload_database():
     stocks = [stock_1, stock_2]
     db.session.add(all(stocks))
 
-    for user in users:
-        for p in range(random.randint(3, 6)):
-            # picking a random date for the analysis
-            date_analysis = datetime.datetime.now() - \
-                        datetime.timedelta(days=random.randint(1, 90),
-                                           hours=random.randint(1, 23),
-                                           minutes=random.randint(1, 59))
-            # creating a random analysis
-            analysis = Analysis(title=lorem.words(random.randint(3, 7)),
-                        content=lorem.paragraphs(random.randint(2, 10)),
-                        date_posted=date_analysis,
-                        price=random.randint(1, 100),
-                        earnings=random.randint(1, 1000),
-                        p_e=Analysis.price/Analysis.earnings,
-                        market_cap=(random.randint(1, 500)),
-                        user=user)
-            db.session.add(analysis)
+    for stock in range(random.choice(stocks)):
+        for user in range(random.choice(users)):
+            for a in range(random.randint(1, 6)):
+                # picking a random date for the analysis
+                date_analysis = datetime.datetime.now() - \
+                                datetime.timedelta(days=random.randint(1, 90),
+                                                   hours=random.randint(1, 23),
+                                                   minutes=random.randint(1, 59))
+                # creating a random analysis
+                analysis = Analysis(title=lorem.words(random.randint(3, 7)),
+                                    content=lorem.paragraphs(random.randint(2, 10)),
+                                    date_posted=date_analysis,
+                                    price=random.randint(1, 100),
+                                    earnings=random.randint(1, 1000),
+                                    p_e=Analysis.price / Analysis.earnings,
+                                    market_cap=(random.randint(1, 500)),
+                                    user=user)
+                db.session.add(analysis)
 
-            diagram=Diagram(date=date_analysis, stock=random.choice(stocks))
+                diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
+                db.session.add(diagram)
 
 
     # TODO: Here you should include the generation of rows for your database
-
     try:
         db.session.commit()
         app.logger.info('Finalized - database created successfully!')
