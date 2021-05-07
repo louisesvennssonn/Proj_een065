@@ -6,12 +6,17 @@ import datetime
 from stock_analysis import db, login_manager
 from flask_login import UserMixin
 
+db.metadata.clear()
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@dataclass
 class User(db.Model, UserMixin):
+    id: int
+    username: str
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -19,8 +24,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
-        return f"<User(id='{self.id}', username='{self.username}', email='{self.email}',\
-         image_file='{self.image_file}')>"
+        return f"<User(id='{self.id}', username='{self.username}', email='{self.email}', image_file='{self.image_file}')>"
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
