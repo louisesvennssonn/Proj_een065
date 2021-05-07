@@ -63,9 +63,9 @@ def reload_database():
     assert len(User.query.all()) == 3, 'It seems that user failed to be inserted!'
     users = [default_user1, default_user2, default_user3]
 
-    stock_1 = Stock(name='Investor', number_of_shares=10000)
+    stock_1 = Stock(name='Investor', number_of_shares=random.randint(1, 100000))
     db.session.add(stock_1)
-    stock_2 = Stock(name='Hello', number_of_shares=10000000)
+    stock_2 = Stock(name='Hello', number_of_shares=random.randint(1, 1000000))
     db.session.add(stock_2)
     stocks = [stock_1, stock_2]
     db.session.add(all(stocks))
