@@ -69,7 +69,7 @@ def reload_database():
     db.session.add(stock_2)
     stocks = [stock_1, stock_2]
     db.session.add(all(stocks))
-
+"Hello"
     for stock in range(random.choice(stocks)):
         for user in range(random.choice(users)):
             for a in range(random.randint(1, 6)):
