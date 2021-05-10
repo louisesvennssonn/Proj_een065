@@ -1,13 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>New Infront</h1>
-        <div>
-            <label for="stocks">Choose a stock:</label>
-            <select id="stocks" name="stocks">
-                <option value="select">Select...</option>
-                <option value="investor">Investor</option>
-            </select>
-        </div>
-    </form>
+    <h1>Welcome to New Infront</h1>
+    {% if current_user.is_authenticated %}
+    <p>You are logged in</p>
+    {% else %}
+    <p>You are not logged in</p>
+    {% endif %}
     <!-- TODO: make sure to put your content here. -->
 {% endblock content %}

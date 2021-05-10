@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from stock_analysis import app, db, bcrypt
-from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm
-from stock_analysis.models import User
+from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -133,5 +133,29 @@ def account():
                            title='Account',
                            form=form)
 
+@app.route("/analysis/new", methods=['GET', 'POST'])
+@login_required
+def new_analysis():
+    form = PostForm()
+    if form.validate_on_submit():
+        created_analysis = Analysis(title=form.title.data,
+                            price=form.price.data,
+                            earnings=form.earnings.data,
+                            content=form.content.data,
+                            user=current_user)
+        db.session.add(created_analysis)
+        try:
+            db.session.commit()
+            flash('Your analysis has been created!', 'success')
+            return redirect(url_for('home'))
+        except Exception as e:
+            db.session.rollback()
+            app.logger.critical(f'Error while inserting a new analysis: {created_analysis}')
+            app.logger.exception(e)
+            flash('There was an error while creating your analysis. Try again later.', 'danger')
+    return render_template('create_post.html',
+                           title='New Analysis',
+                           form=form,
+                           legend='New Analysis')
 
 # TODO: create here your routes

@@ -72,6 +72,7 @@ def reload_database():
     db.session.add(stock_2)
 
     stocks = [stock_1, stock_2]
+
     try:
         db.session.commit()
     except Exception:
@@ -81,7 +82,7 @@ def reload_database():
 
     for stock in stocks:
         for user in users:
-            for a in range(random.randint(1, 3)):
+            for a in range(random.randint(1, 2)):
                 # picking a random date for the analysis
                 date_analysis = datetime.datetime.now() - \
                                 datetime.timedelta(days=random.randint(1, 90),
