@@ -52,7 +52,7 @@ class Analysis(db.Model):
     stock = db.relationship(Stock, backref=db.backref('analyses', lazy=True,))
 
     def __repr__(self):
-        return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}')>"
+        return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}', price='{self.price}', earnings='{self.earnings}', p_e='{self.p_e}')>"
 
 @dataclass
 class Diagram(db.Model):

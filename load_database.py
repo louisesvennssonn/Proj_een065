@@ -3,6 +3,8 @@ import sys
 import random
 import datetime
 import requests
+import matplotlib.pyplot as plt
+import networkx as nx
 from stock_analysis import db, bcrypt, app
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from lorem_text import lorem
@@ -77,28 +79,29 @@ def reload_database():
         app.logger.critical('Error while committing the user insertion.')
         app.logger.exception()
 
-    for stock in (stocks):
-        for user in [default_user1, default_user2]:
-            for a in range(random.randint(1, 6)):
+    for stock in stocks:
+        for user in users:
+            for a in range(random.randint(1, 3)):
                 # picking a random date for the analysis
                 date_analysis = datetime.datetime.now() - \
                                 datetime.timedelta(days=random.randint(1, 90),
                                                    hours=random.randint(1, 23),
                                                    minutes=random.randint(1, 59))
                 # creating a random analysis
+
                 analysis = Analysis(title=lorem.words(random.randint(3, 7)),
                                     content=lorem.paragraphs(random.randint(2, 10)),
                                     date_posted=date_analysis,
-                                    price=random.randint(1, 100),
-                                    earnings=random.randint(1, 1000),
-                                    p_e=random.randint(1, 1000),
-                                    market_cap=(random.randint(1, 500)),
+                                    price=random.randint(1, 1000),
+                                    earnings=random.randint(1, 10000),
+                                    p_e=random.randint(1, 10000),
+                                    market_cap=random.randint(1, 10000),
                                     user=user,
                                     stock=stock)
                 db.session.add(analysis)
 
-                # diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
-                # db.session.add(diagram)
+        diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
+        db.session.add(diagram)
 
 
     # TODO: Here you should include the generation of rows for your database
@@ -127,6 +130,11 @@ def query_database():
     print('\nAll analyses:')
     for analysis in analyses:
         print('\t', analysis)
+
+    diagrams = Diagram.query.all()
+    print('\nAll diagrams:')
+    for diagram in diagrams:
+        print('\t', diagram)
 
 
 if __name__ == '__main__':
