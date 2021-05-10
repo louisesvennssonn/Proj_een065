@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<User(id='{self.id}', username='{self.username}', email='{self.email}', image_file='{self.image_file}')>"
-
+@dataclass
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=True)
@@ -34,7 +34,7 @@ class Stock(db.Model):
     def __repr__(self):
         return f"<Stock(id='{self.id}', name='{self.name}', number_of_shares='{self.number_of_shares}')>"
 
-
+@dataclass
 class Analysis(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
@@ -54,6 +54,7 @@ class Analysis(db.Model):
     def __repr__(self):
         return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}')>"
 
+@dataclass
 class Diagram(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, default=datetime.datetime.now())

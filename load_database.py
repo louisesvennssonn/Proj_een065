@@ -61,7 +61,7 @@ def reload_database():
 
     # testing if the users were added correctly
     assert len(User.query.all()) == 3, 'It seems that user failed to be inserted!'
-    #users = [default_user1, default_user2, default_user3]
+    users = [default_user1, default_user2, default_user3]
 
     stock_1 = Stock(name='Investor', number_of_shares=random.randint(1, 100000))
     db.session.add(stock_1)
@@ -70,34 +70,32 @@ def reload_database():
     db.session.add(stock_2)
 
     stocks = [stock_1, stock_2]
-    db.session.add(all(stocks))
-
     try:
         db.session.commit()
-    except Exception as e:
+    except Exception:
         db.session.rollback()
         app.logger.critical('Error while committing the user insertion.')
-        app.logger.exception(e)
+        app.logger.exception()
 
-    #
-    # for stock in range(random.choice(stocks)):
-    #     for user in range(random.choice(users)):
-    #         for a in range(random.randint(1, 6)):
-    #             # picking a random date for the analysis
-    #             date_analysis = datetime.datetime.now() - \
-    #                             datetime.timedelta(days=random.randint(1, 90),
-    #                                                hours=random.randint(1, 23),
-    #                                                minutes=random.randint(1, 59))
-    #             # creating a random analysis
-    #             analysis = Analysis(title=lorem.words(random.randint(3, 7)),
-    #                                 content=lorem.paragraphs(random.randint(2, 10)),
-    #                                 date_posted=date_analysis,
-    #                                 price=random.randint(1, 100),
-    #                                 earnings=random.randint(1, 1000),
-    #                                 p_e=Analysis.price / Analysis.earnings,
-    #                                 market_cap=(random.randint(1, 500)),
-    #                                 user=user)
-    #             db.session.add(analysis)
+    for stock in (stocks):
+        for user in [default_user1, default_user2]:
+            for a in range(random.randint(1, 6)):
+                # picking a random date for the analysis
+                date_analysis = datetime.datetime.now() - \
+                                datetime.timedelta(days=random.randint(1, 90),
+                                                   hours=random.randint(1, 23),
+                                                   minutes=random.randint(1, 59))
+                # creating a random analysis
+                analysis = Analysis(title=lorem.words(random.randint(3, 7)),
+                                    content=lorem.paragraphs(random.randint(2, 10)),
+                                    date_posted=date_analysis,
+                                    price=random.randint(1, 100),
+                                    earnings=random.randint(1, 1000),
+                                    p_e=random.randint(1, 1000),
+                                    market_cap=(random.randint(1, 500)),
+                                    user=user,
+                                    stock=stock)
+                db.session.add(analysis)
 
                 # diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
                 # db.session.add(diagram)
@@ -119,6 +117,16 @@ def query_database():
     print('\nAll users:')
     for user in users:
         print('\t', user)
+
+    stocks = Stock.query.all()
+    print('\nAll stocks:')
+    for stock in stocks:
+        print('\t', stock)
+
+    analyses = Analysis.query.all()
+    print('\nAll analyses:')
+    for analysis in analyses:
+        print('\t', analysis)
 
 
 if __name__ == '__main__':
