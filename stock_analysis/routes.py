@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from stock_analysis import app, db, bcrypt
-from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, AnalysisForm
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -136,7 +136,7 @@ def account():
 @app.route("/analysis/new", methods=['GET', 'POST'])
 @login_required
 def new_analysis():
-    form = PostForm()
+    form = AnalysisForm()
     if form.validate_on_submit():
         created_analysis = Analysis(title=form.title.data,
                             price=form.price.data,
@@ -153,7 +153,7 @@ def new_analysis():
             app.logger.critical(f'Error while inserting a new analysis: {created_analysis}')
             app.logger.exception(e)
             flash('There was an error while creating your analysis. Try again later.', 'danger')
-    return render_template('create_post.html',
+    return render_template('create_analysis.html',
                            title='New Analysis',
                            form=form,
                            legend='New Analysis')

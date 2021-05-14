@@ -6,9 +6,6 @@ import datetime
 from stock_analysis import db, login_manager
 from flask_login import UserMixin
 
-db.metadata.clear()
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -39,10 +36,10 @@ class Analysis(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     price = db.Column(db.Float, nullable=False)
     earnings = db.Column(db.Float, nullable=False)
-    p_e = db.Column(db.Float, nullable=False, default=price/earnings)
+    p_e = db.Column(db.Float, nullable=False)
     market_cap = db.Column(db.Float, nullable=False, default=price*Stock.number_of_shares)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -57,9 +54,10 @@ class Analysis(db.Model):
 @dataclass
 class Diagram(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, default=datetime.datetime.now())
+    date = db.Column(db.DateTime, default=datetime.datetime.now)
     price = db.Column(db.Float, nullable=False)
     stock = db.relationship(Stock, backref=db.backref('diagrams'), lazy=True)
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
 
-
+    def __repr__(self):
+        return f"<Diagram(date='{self.date}', price='{self.price}', stock='{self.stock_id}')>"

@@ -82,30 +82,27 @@ def reload_database():
 
     for stock in stocks:
         for user in users:
-            for a in range(random.randint(1, 2)):
+            for a in range(random.randint(0, 2)):
                 # picking a random date for the analysis
                 date_analysis = datetime.datetime.now() - \
                                 datetime.timedelta(days=random.randint(1, 90),
                                                    hours=random.randint(1, 23),
                                                    minutes=random.randint(1, 59))
                 # creating a random analysis
-
                 analysis = Analysis(title=lorem.words(random.randint(3, 7)),
                                     content=lorem.paragraphs(random.randint(2, 10)),
                                     date_posted=date_analysis,
                                     price=random.randint(1, 1000),
-                                    earnings=random.randint(1, 10000),
-                                    p_e=random.randint(1, 10000),
+                                    earnings=random.randint(1, 100000),
+                                    p_e=random.randint(-5, 20),
                                     market_cap=random.randint(1, 10000),
                                     user=user,
                                     stock=stock)
                 db.session.add(analysis)
 
-        diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
-        db.session.add(diagram)
+                diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
+                db.session.add(diagram)
 
-
-    # TODO: Here you should include the generation of rows for your database
     try:
         db.session.commit()
         app.logger.info('Finalized - database created successfully!')

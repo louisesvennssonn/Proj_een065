@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FloatField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from stock_analysis.models import User
+from stock_analysis.models import User, Stock, Analysis
 
 # WTForms fields: https://wtforms.readthedocs.io/en/2.3.x/fields/
 # WTForms HTML5 fields: https://wtforms.readthedocs.io/en/2.3.x/fields/#module-wtforms.fields.html5
@@ -75,8 +75,12 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
 
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
+class AnalysisForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=50)])
     content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
+    price = FloatField('Price', validators=[DataRequired()])
+    earnings = FloatField('Earnings', validators=[DataRequired()])
+    #p_e = FloatField('p_e', validators=[DataRequired(),], default=price/earnings)
+    market_cap= FloatField('Market_cap', validators=[DataRequired()], default=Stock.number_of_shares*price)
+    submit = SubmitField('Submit')
 # TODO: create here your forms
