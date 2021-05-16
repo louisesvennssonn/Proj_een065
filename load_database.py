@@ -3,8 +3,8 @@ import sys
 import random
 import datetime
 import requests
-import matplotlib.pyplot as plt
-import networkx as nx
+#import matplotlib.pyplot as plt
+#import networkx as nx
 from stock_analysis import db, bcrypt, app
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from lorem_text import lorem

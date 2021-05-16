@@ -2,6 +2,7 @@
 This file contains the declarations of the models.
 """
 from dataclasses import dataclass
+import sys
 import datetime
 from stock_analysis import db, login_manager
 from flask_login import UserMixin
@@ -46,7 +47,7 @@ class Analysis(db.Model):
     user = db.relationship(User, backref=db.backref('analyses', lazy=True))
 
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
-    stock = db.relationship(Stock, backref=db.backref('analyses', lazy=True,))
+    stock = db.relationship(Stock, backref=db.backref('analyses', lazy=True, order_by='Analysis.date_posted.desc()'))
 
     def __repr__(self):
         return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}', price='{self.price}', earnings='{self.earnings}', p_e='{self.p_e}')>"

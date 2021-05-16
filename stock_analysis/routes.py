@@ -7,16 +7,13 @@ from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm,
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
-
-
 @app.route("/")
 @app.route("/home")
 def home():
+    analyses = []
     if current_user.is_authenticated:
-        analysis = Analysis.query.filter_by(user_id=current_user.id).all()
-    else:
-        analysis = Analysis.query.order_by(Analysis.date_posted.desc()).all()
-    return render_template('home.html', analysis=analysis)
+        analyses = Analysis.query
+        return render_template('home.html', analyses=analyses)
 
 
 @app.route("/about")
@@ -138,16 +135,21 @@ def account():
                            title='Account',
                            form=form)
 
+
 @app.route("/analysis/new", methods=['GET', 'POST'])
 @login_required
 def new_analysis():
     form = AnalysisForm()
     if form.validate_on_submit():
-        created_analysis = Analysis(title=form.title.data,
-                            price=form.price.data,
-                            earnings=form.earnings.data,
-                            content=form.content.data,
-                            user=current_user)
+        created_analysis = Analysis(
+            title=form.title.data,
+            price=form.price.data,
+            earnings=form.earnings.data,
+            p_e=form.price / form.earnings,
+            market_cap=form.price * Stock.number_of_shares,
+            content=form.content.data,
+            user=current_user
+        )
         db.session.add(created_analysis)
         try:
             db.session.commit()
