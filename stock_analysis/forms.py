@@ -80,7 +80,7 @@ class AnalysisForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired()])
     earnings = FloatField('Earnings', validators=[DataRequired()])
-    #p_e = FloatField('p_e', validators=[DataRequired(),], default=price/earnings)
+    p_e = FloatField('p_e', validators=[DataRequired(),])
     market_cap= FloatField('Market_cap', validators=[DataRequired()], default=Stock.number_of_shares*price)
     submit = SubmitField('Submit')
 # TODO: create here your forms

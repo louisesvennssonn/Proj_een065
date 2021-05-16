@@ -8,10 +8,15 @@ from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        analysis = Analysis.query.filter_by(user_id=current_user.id).all()
+    else:
+        analysis = Analysis.query.order_by(Analysis.date_posted.desc()).all()
+    return render_template('home.html', analysis=analysis)
 
 
 @app.route("/about")
