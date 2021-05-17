@@ -90,8 +90,3 @@ class AnalysisForm(FlaskForm):
     p_e = FloatField('p_e', validators=[DataRequired()])
     market_cap= FloatField('Market cap', validators=[DataRequired()])
     submit = SubmitField('Submit')
-
-
-
-
-# TODO: create here your forms

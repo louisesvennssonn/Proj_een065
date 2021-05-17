@@ -154,7 +154,7 @@ def create_stock():
                            legend='New Stock')
 
 
-@app.route("/stock/<str:stock_id>", methods=['GET', 'POST'])
+@app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
     form = AnalysisForm
@@ -201,7 +201,7 @@ def update_stock(stock_id):
                            legend='Update Stock')
 
 
-@app.route("/stock/<str:stock_id>/delete", methods=['POST'])
+@app.route("/stock/<int:stock_id>/delete", methods=['POST'])
 @login_required
 def delete_post(stock_id):
     stock_to_delete = Stock.query.get_or_404(stock_id)
@@ -247,7 +247,7 @@ def update_analysis(analysis_id):
                            legend='Update Analysis')
 
 
-@app.route("/stock/<str:analysis_id>/delete", methods=['POST'])
+@app.route("/stock/<int:analysis_id>/delete", methods=['POST'])
 @login_required
 def delete_analysis(analysis_id):
     analysis_to_delete = Stock.query.get_or_404(analysis_id)

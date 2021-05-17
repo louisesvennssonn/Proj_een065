@@ -1,26 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Welcome to New Infront</h1>
-    {% if current_user.is_authenticated %}
-    <p>Here are your analyses</p>
-        <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Stock</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for analysis in analyses %}
-        <tr>
-            <th scope="row">{{ analysis.id }}</th>
-            <td>{{ analysis.date_posted }}</td>
-        </tr>
-        </tbody>
-        </table>
-        {% endfor %}
-    {% else %}
+
     <p>In the list below you can see stocks that has analyses assigned to them.</p>
         <form action="/action_page.php">
             <div>
@@ -31,7 +12,6 @@
                 </select>
             </div>
         </form>
-    {% endif %}
 
     <!-- TODO: make sure to put your content here. -->
 {% endblock content %}
