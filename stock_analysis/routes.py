@@ -162,6 +162,35 @@ def create_stock():
                            legend='New Stock')
 
 
+@app.route("/analysis/new")
+def create_analysis():
+    form = AnalysisForm()
+    if form.validate_on_submit():
+        created_analysis = Analysis(title=form.title.data,
+                                    content=form.content.data,
+                                    price=form.price.data,
+                                    earnings=form.earnings.data,
+                                    p_e=form.price / form.earnings,
+                                    market_cap=form.price * Stock.number_of_shares,
+                                    user=current_user
+                                    )
+        db.session.add(created_analysis)
+        try:
+            db.session.commit()
+            flash('Your analysis has been created!', 'success')
+            return redirect(url_for('home'))
+        except:
+            flash('Something went wrong, please try again', 'danger')
+            return redirect(url_for('create_analysis'))
+
+        return redirect(url_for('home'))
+    return render_template('create_analysis.html',
+                           title='New Analysis',
+                           form=form,
+                           legend='New Analysis')
+    return render_template('create_analysis.html')
+
+
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
