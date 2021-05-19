@@ -34,7 +34,8 @@
                   <div class="navbar-nav">
                   {% if current_user.is_authenticated %}
                     <!-- TODO: here you have the links to the logged in users -->
-                    <a class="nav-item nav-link" href="#">Logged in</a>
+                    <a id="create_stock" class="nav-item nav-link" href="{{ url_for('create_stock') }}">Create Stock</a>
+                    <a id="my_page" class="nav-item nav-link" href="{{ url_for('my_page') }}">My Page</a>
                     <a id="account" class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
                     <a id="logout" class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                   {% else %}
@@ -65,7 +66,6 @@
                 <div class="content-section">
                     <h3>Our Sidebar</h3>
                     <p class='text-muted'>
-                        You can put any information here you'd like.
                         <!-- TODO: check whether you want a sidebar or not -->
                     </p>
                 </div>

@@ -2,16 +2,15 @@
 {% block content %}
     <h1>Welcome to New Infront</h1>
 
-    <p>In the list below you can see stocks that has analyses assigned to them.</p>
-        <form action="/action_page.php">
-            <div>
-                <label for="stocks">Choose a stock:</label><br>
-                <select id="stocks" name="stock">
-                    <option value="select">Select...</option>
-                    <option value="Investor"></option>
-                </select>
-            </div>
-        </form>
+        <label for="stocks">In the list below you can see stocks that has analyses assigned to them.</label><br>
+        <select id="stocks" name="stocks">
+            <option value="select">Select</option>
+            {% for stock in stocks %}
+            <option value="stock_name">{{ stock.name }}</option>
+            {% endfor %}
+        </select>
+
 
     <!-- TODO: make sure to put your content here. -->
+
 {% endblock content %}

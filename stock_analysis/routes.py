@@ -10,15 +10,19 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    analyses = []
-    if current_user.is_authenticated:
-        analyses = Analysis.query.filter_by(user_id=current_user.id).all()
-    return render_template('home.html', analyses=analyses)
+    stocks = Stock.query.order_by(Stock.name.desc()).all()
+    return render_template('home.html', stocks=stocks)
 
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+
+@app.route("/my_page")
+def my_page():
+    my_analyses = Analysis.query.filter_by(user_id=current_user.id).order_by(Analysis.date_posted).all()
+    return render_template('my_page.html', my_analyses=my_analyses)
 
 
 @app.route("/register", methods=['GET', 'POST'])  # this route can receive GET and POST requests
@@ -142,7 +146,7 @@ def create_stock():
     form = StockForm()
     if form.validate_on_submit():
         created_stock = Stock(name=form.name.data,
-                            number_of_shares=form.content_type.data,
+                            number_of_shares=form.number_of_shares.data,
                             )
         db.session.add(created_stock)
         db.session.commit()
@@ -199,25 +203,6 @@ def update_stock(stock_id):
                            title='Update Stock',
                            form=form,
                            legend='Update Stock')
-
-
-@app.route("/stock/<int:stock_id>/delete", methods=['POST'])
-@login_required
-def delete_post(stock_id):
-    stock_to_delete = Stock.query.get_or_404(stock_id)
-    if stock_to_delete.author != current_user:
-        abort(403)  # only the author can delete their posts
-    # first we need to delete all the comments
-    # this can be also configured as "cascade delete all"
-    # so that all comments are deleted automatically
-    # I personally prefer explicitly deleting the child rows
-    # see models.py file, class Comment
-    for your_stock in stock_to_delete.stocks:
-        db.session.delete(your_stock)
-    db.session.delete(stock_to_delete)
-    db.session.commit()
-    flash('Your stock has been deleted!', 'success')
-    return redirect(url_for('home'))
 
 
 @app.route("/stock/<int:analysis_id>/update", methods=['GET', 'POST'])

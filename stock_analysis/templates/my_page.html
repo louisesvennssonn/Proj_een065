@@ -1,47 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
-<head>
-    <meta charset="UTF-8">
-    <title>My page</title>
-</head>
-<body>
-{% if current_user.is_authenticated %}
-  <h2>Here are your stocks</h2>
+    <div>
+        <h2>Welcome</h2>
+        <h3>Here are your analyses</h3>
         <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Name</th>
-            <th scope="col">Number of analyses</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for analysis in analyses %}
-        <tr>
-            <th scope="row">{{ analysis.id }}</th>
-            <td>{{ analysis.date_posted }}</td>
-        </tr>
-        </tbody>
-        </table>
-        {% endfor %}
-    <h2>Here are your analyses</h2>
-        <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Stock</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for analysis in analyses %}
-        <tr>
-            <th scope="row">{{ analysis.id }}</th>
-            <td>{{ analysis.date_posted }}</td>
-        </tr>
-        </tbody>
-        </table>
-        {% endfor %}
-</body>
-
+            <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Stock</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for analysis in analyses %}
+                <tr>
+                    <th scope="row">{{ analysis.title }}</th>
+                    <td>{{ analysis.stock.name }}</td>
+                </tr>
+                </tbody>
+                </table>
+            {% endfor %}
+    </div>
 {% endblock content %}
