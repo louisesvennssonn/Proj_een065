@@ -77,9 +77,15 @@ class UpdateAccountForm(FlaskForm):
 
 
 class StockForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(min=1, max= 20)])
+    name = StringField('Name', validators=[DataRequired(), Length(min=1, max=20)])
     number_of_shares = IntegerField('Number of shares', validators=[DataRequired()])
+    #ticker = StringField('Ticker', validators=[DataRequired(), Length(min=4, max=4)])
     create = SubmitField('Create')
+
+    def validate_stock(self, name):
+        stock = Stock.query.filter_by(name=name.data).first()
+        if stock:
+            raise ValidationError('This stock is already created.')
 
 
 class AnalysisForm(FlaskForm):
@@ -88,5 +94,5 @@ class AnalysisForm(FlaskForm):
     price = FloatField('Price', validators=[DataRequired()])
     earnings = FloatField('Earnings', validators=[DataRequired()])
     p_e = FloatField('p_e', validators=[DataRequired()])
-    market_cap= FloatField('Market cap', validators=[DataRequired()])
+    market_cap = FloatField('Market cap', validators=[DataRequired()])
     submit = SubmitField('Submit')

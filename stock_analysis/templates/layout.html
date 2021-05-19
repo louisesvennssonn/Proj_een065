@@ -35,7 +35,6 @@
                   {% if current_user.is_authenticated %}
                     <!-- TODO: here you have the links to the logged in users -->
                     <a id="create_stock" class="nav-item nav-link" href="{{ url_for('create_stock') }}">Create Stock</a>
-                    <a id="my_page" class="nav-item nav-link" href="{{ url_for('my_page') }}">My Page</a>
                     <a id="account" class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
                     <a id="logout" class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                   {% else %}

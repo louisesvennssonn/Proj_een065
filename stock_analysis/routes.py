@@ -7,22 +7,20 @@ from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm,
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
+
 @app.route("/")
 @app.route("/home")
 def home():
-    stocks = Stock.query.order_by(Stock.name.desc()).all()
-    return render_template('home.html', stocks=stocks)
+    stocks = Stock.query.order_by(Stock.name).all()
+    analyses = []
+    if current_user.is_authenticated:
+        analyses = Analysis.query.filter_by(user_id=current_user.id).all()
+    return render_template('home.html', stocks=stocks, analyses=analyses)
 
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
-
-
-@app.route("/my_page")
-def my_page():
-    my_analyses = Analysis.query.filter_by(user_id=current_user.id).order_by(Analysis.date_posted).all()
-    return render_template('my_page.html', my_analyses=my_analyses)
 
 
 @app.route("/register", methods=['GET', 'POST'])  # this route can receive GET and POST requests
@@ -146,8 +144,8 @@ def create_stock():
     form = StockForm()
     if form.validate_on_submit():
         created_stock = Stock(name=form.name.data,
-                            number_of_shares=form.number_of_shares.data,
-                            )
+                              number_of_shares=form.number_of_shares.data
+                              )
         db.session.add(created_stock)
         db.session.commit()
         flash('Your stock has been created!', 'success')
@@ -161,7 +159,7 @@ def create_stock():
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
-    form = AnalysisForm
+    form = AnalysisForm()
     if form.validate_on_submit():
         if current_user.is_authenticated:
             new_analysis = Analysis(title=form.title.data,
@@ -169,8 +167,9 @@ def stock(stock_id):
                                     price=form.price.data,
                                     earnings=form.earnings.data,
                                     p_e=form.price / form.earnings,
-                                    market_cap=form.price * Stock.number_of_shares
-                                    )
+                                    market_cap=form.price * Stock.number_of_shares,
+                                    user=current_user,
+                                    stock=current_stock)
             db.session.add(new_analysis)
             db.session.commit()
             flash('Your analysis has been submitted!', 'success')
@@ -249,6 +248,5 @@ def delete_analysis(analysis_id):
     db.session.commit()
     flash('Your analysis has been deleted!', 'success')
     return redirect(url_for('home'))
-
 
 # TODO: create here your routes

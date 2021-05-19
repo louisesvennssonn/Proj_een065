@@ -2,14 +2,15 @@
 This file contains the declarations of the models.
 """
 from dataclasses import dataclass
-import sys
 import datetime
 from stock_analysis import db, login_manager
 from flask_login import UserMixin
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @dataclass
 class User(db.Model, UserMixin):
@@ -23,6 +24,8 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<User(id='{self.id}', username='{self.username}', email='{self.email}', image_file='{self.image_file}')>"
+
+
 @dataclass
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +34,7 @@ class Stock(db.Model):
 
     def __repr__(self):
         return f"<Stock(id='{self.id}', name='{self.name}', number_of_shares='{self.number_of_shares}')>"
+
 
 @dataclass
 class Analysis(db.Model):
@@ -51,6 +55,7 @@ class Analysis(db.Model):
 
     def __repr__(self):
         return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}', price='{self.price}', earnings='{self.earnings}', p_e='{self.p_e}')>"
+
 
 @dataclass
 class Diagram(db.Model):

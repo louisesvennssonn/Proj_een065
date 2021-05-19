@@ -1,16 +1,44 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Welcome to New Infront</h1>
+<h1>Welcome to New Infront</h1>
+    <div class="container">
+        <h2>Stocks</h2>
+        <div class="stocks">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Stocks
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                {% for stock in stocks %}
+                <li><a class="article-title" href="{{ url_for('stock', stock_id=stock.id) }}">{{ stock.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        <label for="stocks">In the list below you can see stocks that has analyses assigned to them.</label><br>
-        <select id="stocks" name="stocks">
-            <option value="select">Select</option>
-            {% for stock in stocks %}
-            <option value="stock_name">{{ stock.name }}</option>
-            {% endfor %}
-        </select>
-
-
+    </div>
     <!-- TODO: make sure to put your content here. -->
+    {% if current_user.is_authenticated %}
+        <h3>Here are your analyses</h3>
 
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Stock</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for analysis in analyses %}
+                        <tr>
+                            <th scope="row">{{ analysis.id }}</th>
+                            <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ analysis.title }}</td>
+                            <td>{{ analysis.stock.name }}</td>
+                        </tr>
+                </tbody>
+        </table>
+            {% endfor %}
+    {% else %}
+        <h3>Log in to see your analyses</h3>
+    {% endif %}
 {% endblock content %}
