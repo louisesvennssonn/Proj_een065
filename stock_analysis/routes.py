@@ -143,12 +143,18 @@ def account():
 def create_stock():
     form = StockForm()
     if form.validate_on_submit():
-        created_stock = Stock(name=form.name.data,
+        created_stock = Stock(name=form.name.data.upper(),
                               number_of_shares=form.number_of_shares.data
                               )
         db.session.add(created_stock)
-        db.session.commit()
-        flash('Your stock has been created!', 'success')
+        try:
+            db.session.commit()
+            flash('Your stock has been created!', 'success')
+            return redirect(url_for('home'))
+        except:
+            flash('This stock is already created', 'danger')
+            return redirect(url_for('create_stock'))
+
         return redirect(url_for('home'))
     return render_template('create_stock.html',
                            title='New Stock',

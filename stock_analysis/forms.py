@@ -77,7 +77,7 @@ class UpdateAccountForm(FlaskForm):
 
 
 class StockForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(min=1, max=20)])
+    name = StringField('Name', validators=[DataRequired(), Length(min=1, max=20),])
     number_of_shares = IntegerField('Number of shares', validators=[DataRequired()])
     #ticker = StringField('Ticker', validators=[DataRequired(), Length(min=4, max=4)])
     create = SubmitField('Create')
