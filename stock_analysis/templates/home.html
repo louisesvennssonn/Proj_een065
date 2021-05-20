@@ -5,7 +5,7 @@
     <h3>To read or add an analysis select a stock below</h3>
     <div class="container">
         <div class="stocks">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Stocks
+            <button class="btn btn-primary btn-lg btn-block" type="button" data-toggle="dropdown">Stocks
                 <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 {% for stock in stocks %}
@@ -20,10 +20,8 @@
     </div>
 
     </div>
-    <!-- TODO: make sure to put your content here. -->
     {% if current_user.is_authenticated %}
         <h3>Here are your analyses</h3>
-
         <table class="table">
             <thead>
                 <tr>
@@ -35,12 +33,12 @@
             </thead>
                 <tbody>
                     {% for analysis in analyses %}
-                        <tr>
-                            <th scope="row">{{ analysis.id }}</th>
-                            <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
-                            <td>{{ analysis.title }}</td>
-                            <td>{{ analysis.stock.name }}</td>
-                        </tr>
+                    <tr>
+                        <th scope="row">{{ analysis.id }}</th>
+                        <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ analysis.title }}</td>
+                        <td>{{ analysis.stock.name }}</td>
+                    </tr>
                 </tbody>
         </table>
             {% endfor %}
