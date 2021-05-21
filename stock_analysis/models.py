@@ -31,7 +31,7 @@ class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=True)
     number_of_shares = db.Column(db.Integer, nullable=False)
-    #ticker = db.Column(db.Integer, nullable=False)
+    #ticker = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f"<Stock(id='{self.id}', name='{self.name}', number_of_shares='{self.number_of_shares}')>"

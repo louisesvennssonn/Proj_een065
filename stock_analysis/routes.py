@@ -2,6 +2,8 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
+
+import stock_analysis.models
 from stock_analysis import app, db, bcrypt
 from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, AnalysisForm, StockForm
 from stock_analysis.models import User, Analysis, Stock, Diagram

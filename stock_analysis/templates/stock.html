@@ -1,63 +1,47 @@
 {% extends "layout.html" %}
 {% block content %}
     <h2>Stock: {{ stock.name }}</h2>
-    <script>
-        window.onload = function () {
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2",
-                title: {
-                    text: "{{ stock.name }}"
-                },
-                data: [{
-                    type: "line",
-                    indexLabelFontSize: 16,
-                    dataPoints: [
-                        {y: 450},
-                        {y: 414},
-                        {y: 520, indexLabel: "\u2191 highest", markerColor: "red", markerType: "triangle"},
-                        {y: 460},
-                        {y: 450},
-                        {y: 500},
-                        {y: 480},
-                        {y: 480},
-                        {y: 410, indexLabel: "\u2193 lowest", markerColor: "DarkSlateGrey", markerType: "cross"},
-                        {y: 500},
-                        {y: 480},
-                        {y: 510}
-                    ]
-                }]
-            });
-            chart.render();
-
-        }
-    </script>
-    </head>
-    <body>
-    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     {% if current_user.is_authenticated %}
         <a class="btn btn-primary" href="{{ url_for('create_analysis') }}" role="button">Create Analysis</a>
     {% endif %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Title</th>
-            <th scope="col">Stock</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for analysis in stock.analysis %}
-            <tr>
-                <th scope="row">{{ analysis.id }}</th>
-                <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
-                <td>{{ analysis.title }}</td>
-                <td>{{ analysis.stock.name }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h4>Analyses</h4>
+    {% for analysis in stock.analyses %}
+            <div class="media-body">
+                <div class="article-metadata">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6"><b>{{ analysis.user }}</b></div>
+                            <div class="col-6"
+                                 style="text-align: right">{{ analysis.date_posted.strftime('%Y-%m-%d %H:%M') }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm"><p class="text-justify">{{ analysis.content }}</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Analysis</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure that you want to delete the analysis and all its comments?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
