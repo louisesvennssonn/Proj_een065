@@ -12,5 +12,3 @@ requests
 pytest
 selenium
 lorem-text
-matplotlib
-networkx
