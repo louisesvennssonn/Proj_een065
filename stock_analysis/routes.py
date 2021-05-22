@@ -164,23 +164,26 @@ def create_stock():
                            legend='New Stock')
 
 
-@app.route("/analysis/new")
-def create_analysis():
+@app.route("/stock/<int:stock_id>/new", methods=['GET', 'POST'])
+@login_required
+def create_analysis(stock_id):
     form = AnalysisForm()
+    current_stock = Stock.query.get_or_404(stock_id)
     if form.validate_on_submit():
         created_analysis = Analysis(title=form.title.data,
                                     content=form.content.data,
                                     price=form.price.data,
                                     earnings=form.earnings.data,
-                                    p_e=form.price / form.earnings,
-                                    market_cap=form.price * Stock.number_of_shares,
-                                    user=current_user
+                                    p_e=form.p_e.data,
+                                    market_cap=form.market_cap,
+                                    user=current_user,
+                                    stock=current_stock
                                     )
         db.session.add(created_analysis)
         try:
             db.session.commit()
             flash('Your analysis has been created!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('stock'))
         except:
             flash('Something went wrong, please try again', 'danger')
             return redirect(url_for('create_analysis'))
@@ -190,29 +193,13 @@ def create_analysis():
                            title='New Analysis',
                            form=form,
                            legend='New Analysis')
-    return render_template('create_analysis.html')
+
 
 
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
-    form = AnalysisForm()
-    if form.validate_on_submit():
-        if current_user.is_authenticated:
-            new_analysis = Analysis(title=form.title.data,
-                                    content=form.content.data,
-                                    price=form.price.data,
-                                    earnings=form.earnings.data,
-                                    p_e=form.price / form.earnings,
-                                    market_cap=form.price * Stock.number_of_shares,
-                                    user=current_user,
-                                    stock=current_stock)
-            db.session.add(new_analysis)
-            db.session.commit()
-            flash('Your analysis has been submitted!', 'success')
-            return redirect(f'/stock/{current_stock.id}')
-        else:
-            flash('You are not logged in. You need to be logged in to be able to create an analysis!', 'danger')
+    form = Diagram
     return render_template('stock.html',
                            name=current_stock.name,
                            stock=current_stock,
@@ -241,9 +228,9 @@ def update_stock(stock_id):
                            legend='Update Stock')
 
 
-@app.route("/stock/<int:analysis_id>/update", methods=['GET', 'POST'])
+@app.route("/stock/<int:stock_id>/<int:analysis_id>/update", methods=['GET', 'POST'])
 @login_required
-def update_analysis(analysis_id):
+def update_analysis(stock_id,analysis_id):
     analysis_to_update = Analysis.query.get_or_405(analysis_id)
     if analysis_to_update.author != current_user:
         abort(403)  # only the owner of the post can edit it!

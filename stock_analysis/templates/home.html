@@ -9,7 +9,8 @@
                 <span class="caret"></span></button>
             <ul class="dropdown-menu btn-lrg">
                 {% for stock in stocks %}
-                <li><a class="article-title" href="{{ url_for('stock', stock_id=stock.id) }}">{{ stock.name }}</a></li>
+                    <li><a class="article-title" href="{{ url_for('stock', stock_id=stock.id) }}">{{ stock.name }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
