@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ legend }}</legend>
+                <div class="form-group">
+                    {{ form.title.label(class="form-control-label") }}
+                    {% if form.title.errors %}
+                        {{ form.title(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.title(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.price.label(class="form-control-label") }}
+                    {% if form.price.errors %}
+                        {{ form.price(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.price.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.price(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.earnings.label(class="form-control-label") }}
+                    {% if form.earnings.errors %}
+                        {{ form.earnings(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.earnings.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.earnings(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.p_e.label(class="form-control-label") }}
+                    {% if form.p_e.errors %}
+                        {{ form.p_e(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.p_e.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.p_e(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.market_cap.label(class="form-control-label") }}
+                    {% if form.market_cap.errors %}
+                        {{ form.market_cap(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.market_cap.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.market_cap(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                 <div class="form-group">
+<!--                  {{ form.content.label(class="form-control-label") }}-->
+                  {% if form.content.errors %}
+                      {{ form.content(class="form-control form-control-lg is-invalid", rows="3", placeholder="Write analysis here") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.content.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.content(class="form-control form-control-lg", rows="3", placeholder="Write analysis here") }}
+                  {% endif %}
+              </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-primary") }}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

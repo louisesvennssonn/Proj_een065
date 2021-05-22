@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1><b>Welcome to New Infront</b></h1>
+
+    <h3>To read or add an analysis select a stock below</h3>
+    <div class="container">
+        <div class="stocks">
+            <button class="btn btn-secondary btn-lg btn-lrg" type="button" data-toggle="dropdown">Stocks
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu btn-lrg">
+                {% for stock in stocks %}
+                <li><a class="article-title" href="{{ url_for('stock', stock_id=stock.id) }}">{{ stock.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    <div>
+    <br>
+        <br>
+        <br>
+    </div>
+
+    </div>
+
+    {% if current_user.is_authenticated %}
+        <h3>Here are your analyses</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Stock</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for analysis in analyses %}
+                        <tr>
+                            <th scope="row">{{ analysis.id }}</th>
+                            <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ analysis.title }}</td>
+                            <td>{{ analysis.stock.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    {% else %}
+        <h3>Log in to see your analyses</h3>
+    {% endif %}
+{% endblock content %}
