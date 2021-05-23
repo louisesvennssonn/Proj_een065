@@ -55,7 +55,7 @@ class Analysis(db.Model):
     stock = db.relationship(Stock, backref=db.backref('analyses', lazy=True, order_by='Analysis.date_posted.desc()'))
 
     def __repr__(self):
-        return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}', price='{self.prxice}', earnings='{self.earnings}', p_e='{self.p_e}')>"
+        return f"<Analysis(id='{self.id}', stock_id='{self.stock_id}', user_id='{self.user_id}', date_posted='{self.date_posted}', price='{self.price}', earnings='{self.earnings}', p_e='{self.p_e}')>"
 
 
 @dataclass
