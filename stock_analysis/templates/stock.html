@@ -36,7 +36,7 @@
     {% if current_user.is_authenticated %}
         <a class="btn btn-secondary" href="{{ url_for('create_analysis', stock_id=stock.id) }}" role="button">Create Analysis</a>
     {% endif %}
-    <h3>Analyses connected to {{ stock.name }}</h3>
+    <h3><u>Analyses connected to {{ stock.name }}</u></h3>
     {% for analysis in stock.analyses %}
         <div class="article-metadata">
             <h4><a class="article-title" href="{{ url_for('analysis', stock_id=stock.id, analysis_id=analysis.id) }}">{{ analysis.title }}</a></h4>
