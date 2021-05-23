@@ -146,7 +146,8 @@ def create_stock():
     form = StockForm()
     if form.validate_on_submit():
         created_stock = Stock(name=form.name.data.upper(),
-                              number_of_shares=form.number_of_shares.data
+                              number_of_shares=form.number_of_shares.data,
+                              ticker=form.ticker.data.upper()
                               )
         db.session.add(created_stock)
         try:
@@ -157,43 +158,40 @@ def create_stock():
             flash('This stock is already created', 'danger')
             return redirect(url_for('create_stock'))
 
-        return redirect(url_for('home'))
     return render_template('create_stock.html',
                            title='New Stock',
                            form=form,
                            legend='New Stock')
 
 
-@app.route("/stock/<int:stock_id>/new", methods=['GET', 'POST'])
+@app.route("/stock/<int:stock_id>/analysis", methods=['GET', 'POST'])
 @login_required
 def create_analysis(stock_id):
     form = AnalysisForm()
     current_stock = Stock.query.get_or_404(stock_id)
     if form.validate_on_submit():
-        created_analysis = Analysis(title=form.title.data,
+        new_analysis = Analysis(title=form.title.data,
                                     content=form.content.data,
                                     price=form.price.data,
                                     earnings=form.earnings.data,
                                     p_e=form.p_e.data,
-                                    market_cap=form.market_cap,
+                                    market_cap=form.market_cap.data,
                                     user=current_user,
                                     stock=current_stock
                                     )
-        db.session.add(created_analysis)
+        db.session.add(new_analysis)
         try:
             db.session.commit()
             flash('Your analysis has been created!', 'success')
-            return redirect(url_for('stock'))
+            return redirect(f'/stock/{current_stock.id}')
         except:
             flash('Something went wrong, please try again', 'danger')
-            return redirect(url_for('create_analysis'))
+            return redirect(url_for('create_analysis', stock_id=stock_id))
 
-        return redirect(url_for('home'))
     return render_template('create_analysis.html',
-                           title='New Analysis',
+                           stock=current_stock.id,
                            form=form,
                            legend='New Analysis')
-
 
 
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
@@ -204,6 +202,15 @@ def stock(stock_id):
                            name=current_stock.name,
                            stock=current_stock,
                            form=form)
+
+
+@app.route("/stock/<int:stock_id>/<int:analysis_id>/", methods=['GET', 'POST'])
+def analysis(stock_id, analysis_id):
+    current_stock = Stock.query.get_or_404(stock_id)
+    current_analysis = Analysis.query.get_or_404(analysis_id)
+    return render_template('analysis.html',
+                           analysis=current_analysis.id,
+                           stock=current_stock.id)
 
 
 @app.route("/stock/<int:stock_id>/update", methods=['GET', 'POST'])
@@ -218,7 +225,7 @@ def update_stock(stock_id):
         stock_to_update.number_of_shares = form.number_of_shares.data
         db.session.commit()
         flash('Your stock has been updated!', 'success')
-        return redirect(url_for('post', post_id=stock_to_update.id))
+        return redirect(url_for('stock', stock_id=stock_to_update.id))
     elif request.method == 'GET':
         form.name.data = stock_to_update.name
         form.number_of_shares.data = stock_to_update.number_of_shares
@@ -230,8 +237,9 @@ def update_stock(stock_id):
 
 @app.route("/stock/<int:stock_id>/<int:analysis_id>/update", methods=['GET', 'POST'])
 @login_required
-def update_analysis(stock_id,analysis_id):
-    analysis_to_update = Analysis.query.get_or_405(analysis_id)
+def update_analysis(stock_id, analysis_id):
+    stock_with_analysis = Stock.query.get_or_404(stock_id)
+    analysis_to_update = Analysis.query.get_or_404(analysis_id)
     if analysis_to_update.author != current_user:
         abort(403)  # only the owner of the post can edit it!
     form = AnalysisForm()
@@ -242,7 +250,7 @@ def update_analysis(stock_id,analysis_id):
         analysis_to_update.earnings = form.earnings.data
         db.session.commit()
         flash('Your analysis has been updated!', 'success')
-        return redirect(url_for('analysis', analysis_id=analysis_to_update.id))
+        return redirect(url_for('stock', analysis_id=analysis_to_update.id))
     elif request.method == 'GET':
         form.title.data = analysis_to_update.title
         form.content.data = analysis_to_update.content
@@ -255,22 +263,3 @@ def update_analysis(stock_id,analysis_id):
                            legend='Update Analysis')
 
 
-@app.route("/stock/<int:analysis_id>/delete", methods=['POST'])
-@login_required
-def delete_analysis(analysis_id):
-    analysis_to_delete = Stock.query.get_or_404(analysis_id)
-    if analysis_to_delete.author != current_user:
-        abort(403)  # only the author can delete their posts
-    # first we need to delete all the comments
-    # this can be also configured as "cascade delete all"
-    # so that all comments are deleted automatically
-    # I personally prefer explicitly deleting the child rows
-    # see models.py file, class Comment
-    for your_analysis in analysis_to_delete.analyses:
-        db.session.delete(your_analysis)
-    db.session.delete(analysis_to_delete)
-    db.session.commit()
-    flash('Your analysis has been deleted!', 'success')
-    return redirect(url_for('home'))
-
-# TODO: create here your routes

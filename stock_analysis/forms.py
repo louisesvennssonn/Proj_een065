@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FloatField, IntegerField, DateTimeField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FloatField, IntegerField, DateTimeField, DecimalField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from stock_analysis.models import User, Stock, Analysis
@@ -78,20 +78,21 @@ class UpdateAccountForm(FlaskForm):
 
 
 class StockForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(min=1, max=20),])
+    name = StringField('Name', validators=[DataRequired(), Length(min=1, max=20)])
     number_of_shares = IntegerField('Number of shares', validators=[DataRequired()])
-    #ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
+    ticker = StringField('Ticker (4 letters)', validators=[DataRequired(), Length(min=4, max=4)])
     create = SubmitField('Create')
 
 
 class AnalysisForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=1, max=50)])
     content = TextAreaField('Content', validators=[DataRequired(), Length(min=1, max=600)])
-    price = FloatField('Price', validators=[DataRequired()])
-    earnings = FloatField('Earnings', validators=[DataRequired()])
-    p_e = FloatField('p_e', validators=[DataRequired()])
-    market_cap = FloatField('Market cap', validators=[DataRequired()])
+    price = DecimalField('Price', validators=[DataRequired()], places=2)
+    earnings = DecimalField('Earnings', validators=[DataRequired()], places=2)
+    p_e = DecimalField('P_E', validators=[DataRequired()], places=2)
+    market_cap = DecimalField('Market cap', validators=[DataRequired()], places=2)
     submit = SubmitField('Submit')
+
 
 class DiagramForm(FlaskForm):
     price = AnalysisForm.price

@@ -31,10 +31,10 @@ class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=True)
     number_of_shares = db.Column(db.Integer, nullable=False)
-    #ticker = db.Column(db.String, nullable=False)
+    ticker = db.Column(db.String(), nullable=False)
 
     def __repr__(self):
-        return f"<Stock(id='{self.id}', name='{self.name}', number_of_shares='{self.number_of_shares}')>"
+        return f"<Stock(id='{self.id}', name='{self.name}', number_of_shares='{self.number_of_shares}', ticker='{self.ticker}')>"
 
 
 @dataclass
@@ -46,7 +46,7 @@ class Analysis(db.Model):
     price = db.Column(db.Float, nullable=False)
     earnings = db.Column(db.Float, nullable=False)
     p_e = db.Column(db.Float, nullable=False)
-    market_cap = db.Column(db.Float, nullable=False, default=price*Stock.number_of_shares)
+    market_cap = db.Column(db.Float, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship(User, backref=db.backref('analyses', lazy=True))
