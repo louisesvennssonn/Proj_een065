@@ -204,13 +204,10 @@ def stock(stock_id):
                            form=form)
 
 
-@app.route("/stock/<int:stock_id>/<int:analysis_id>/", methods=['GET', 'POST'])
-def analysis(stock_id, analysis_id):
-    current_stock = Stock.query.get_or_404(stock_id)
+@app.route("/analysis/<int:analysis_id>/", methods=['GET', 'POST'])
+def analysis(analysis_id):
     current_analysis = Analysis.query.get_or_404(analysis_id)
-    return render_template('analysis.html',
-                           analysis=current_analysis.id,
-                           stock=current_stock.id)
+    return render_template('analysis.html', analysis=current_analysis)
 
 
 @app.route("/stock/<int:stock_id>/update", methods=['GET', 'POST'])
@@ -235,10 +232,9 @@ def update_stock(stock_id):
                            legend='Update Stock')
 
 
-@app.route("/stock/<int:stock_id>/<int:analysis_id>/update", methods=['GET', 'POST'])
+@app.route("/analysis/<int:analysis_id>/update", methods=['GET', 'POST'])
 @login_required
-def update_analysis(stock_id, analysis_id):
-    stock_with_analysis = Stock.query.get_or_404(stock_id)
+def update_analysis(analysis_id):
     analysis_to_update = Analysis.query.get_or_404(analysis_id)
     if analysis_to_update.author != current_user:
         abort(403)  # only the owner of the post can edit it!

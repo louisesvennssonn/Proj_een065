@@ -19,7 +19,7 @@
                         {
                             type: "area",
                             dataPoints: [//array
-                                {x: new Date(2012, 01, 1), y: 26},
+                                {x: new Date(2012, 1, 1), y: 26},
 
                             ]
                         }
@@ -39,7 +39,7 @@
     <h3><u>Analyses connected to {{ stock.name }}</u></h3>
     {% for analysis in stock.analyses %}
         <div class="article-metadata">
-            <h4><a class="article-title" href="{{ url_for('analysis', stock_id=stock.id, analysis_id=analysis.id) }}">{{ analysis.title }}</a></h4>
+            <h4><a class="article-title" href="{{ url_for('analysis', analysis_id=analysis.id) }}">{{ analysis.title }}</a></h4>
             <div class="mr-2"> User: {{ analysis.user.username }}</div>
             <div class="text-muted">{{ analysis.date_posted.strftime('%Y-%m-%d') }}</div>
             <div class="text-muted">{{ stock.ticker }}</div>
