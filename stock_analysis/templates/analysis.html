@@ -5,8 +5,8 @@
     <div class="content-section">
         {% if analysis.user == current_user %}
           <div>
-            <a id="update" class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_analysis', analysis_id=analysis.id) }}">Update</a>
-            <button id="delete" type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            <a class="btn btn-primary btn-sm" href="{{ url_for('update_analysis', analysis_id=analysis.id) }}" role="button">Update</a>
+                <a class="btn btn-danger btn-sm" href="{{ url_for('delete_analysis', analysis_id=analysis.id) }}" role="button">Delete</a>
           </div>
         {% endif %}
         <div class="row">
@@ -37,5 +37,6 @@
             <div class="col-md-4">The user wrote: </div>
             <div class="col-md-8">{{ analysis.content }}</div>
         </div>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('stock', stock_id=analysis.stock.id) }}" role="button">Return</a>
     </div>
 {% endblock content %}

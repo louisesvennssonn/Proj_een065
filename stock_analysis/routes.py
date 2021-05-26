@@ -197,11 +197,11 @@ def create_analysis(stock_id):
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
-    form = Diagram
+    data = []
     return render_template('stock.html',
                            name=current_stock.name,
                            stock=current_stock,
-                           form=form)
+                           )
 
 
 @app.route("/analysis/<int:analysis_id>/", methods=['GET', 'POST'])
@@ -263,20 +263,15 @@ def update_analysis(analysis_id):
                            legend='Update Analysis')
 
 
-@app.route("/analysis/<int:analysis_id>/delete", methods=['POST'])
+@app.route("/analysis/<int:analysis_id>/delete", methods=['GET', 'POST'])
 @login_required
 def delete_analysis(analysis_id):
     analysis_to_delete = Analysis.query.get_or_404(analysis_id)
-    if analysis_to_delete.user != current_user:
-        abort(403)  # only the author can delete their posts
-    # first we need to delete all the comments
-    # this can be also configured as "cascade delete all"
-    # so that all comments are deleted automatically
-    # I personally prefer explicitly deleting the child rows
-    # see models.py file, class Comment
-    for analysis in analysis_to_delete.stocks:
-        db.session.delete(analysis)
     db.session.delete(analysis_to_delete)
-    db.session.commit()
-    flash('Your post has been deleted!', 'success')
-    return redirect(url_for('home'))
+    try:
+        db.session.commit()
+        flash('Your post has been deleted!', 'success')
+        return redirect(url_for('home'))
+    except:
+        flash('It wasn´t possible to delete the analysis', 'danger')
+    return redirect(url_for('stock', stock_id=analysis_to_delete.stock.id))
