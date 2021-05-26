@@ -236,7 +236,7 @@ def update_stock(stock_id):
 @login_required
 def update_analysis(analysis_id):
     analysis_to_update = Analysis.query.get_or_404(analysis_id)
-    if analysis_to_update.author != current_user:
+    if analysis_to_update.user != current_user:
         abort(403)  # only the owner of the post can edit it!
     form = AnalysisForm()
     if form.validate_on_submit():
@@ -244,14 +244,18 @@ def update_analysis(analysis_id):
         analysis_to_update.content = form.content.data
         analysis_to_update.price = form.price.data
         analysis_to_update.earnings = form.earnings.data
+        analysis_to_update.p_e = form.p_e.data
+        analysis_to_update.market_cap = form.market_cap.data
         db.session.commit()
         flash('Your analysis has been updated!', 'success')
-        return redirect(url_for('stock', analysis_id=analysis_to_update.id))
+        return redirect(url_for('analysis', analysis_id=analysis_to_update.id))
     elif request.method == 'GET':
         form.title.data = analysis_to_update.title
         form.content.data = analysis_to_update.content
         form.price.data = analysis_to_update.price
         form.earnings.data = analysis_to_update.earnings
+        form.p_e.data = analysis_to_update.p_e
+        form.market_cap.data = analysis_to_update.market_cap
 
     return render_template('create_analysis.html',
                            title='Update Analysis',
@@ -259,3 +263,20 @@ def update_analysis(analysis_id):
                            legend='Update Analysis')
 
 
+@app.route("/analysis/<int:analysis_id>/delete", methods=['POST'])
+@login_required
+def delete_analysis(analysis_id):
+    analysis_to_delete = Analysis.query.get_or_404(analysis_id)
+    if analysis_to_delete.user != current_user:
+        abort(403)  # only the author can delete their posts
+    # first we need to delete all the comments
+    # this can be also configured as "cascade delete all"
+    # so that all comments are deleted automatically
+    # I personally prefer explicitly deleting the child rows
+    # see models.py file, class Comment
+    for analysis in analysis_to_delete.stocks:
+        db.session.delete(analysis)
+    db.session.delete(analysis_to_delete)
+    db.session.commit()
+    flash('Your post has been deleted!', 'success')
+    return redirect(url_for('home'))

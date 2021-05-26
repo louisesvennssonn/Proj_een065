@@ -3,6 +3,12 @@
         <h2>Title: {{ analysis.title }}</h2>
         <h4>This analysis is assigned to {{ analysis.stock.name }}</h4>
     <div class="content-section">
+        {% if analysis.user == current_user %}
+          <div>
+            <a id="update" class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_analysis', analysis_id=analysis.id) }}">Update</a>
+            <button id="delete" type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+          </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-4">This analysis was written by: </div>
             <div class="col-md-8">{{ analysis.user.username }}</div>
@@ -28,7 +34,7 @@
             <div class="col-md-8">{{ analysis.market_cap }}</div>
         </div>
         <div class="row">
-            <div class="col-md-4">The user thought: </div>
+            <div class="col-md-4">The user wrote: </div>
             <div class="col-md-8">{{ analysis.content }}</div>
         </div>
     </div>
