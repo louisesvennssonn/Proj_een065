@@ -1,38 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Stock: {{ stock.name }}</h1>
-    <script type="text/javascript">
-        window.onload = function () {
-            var chart = new CanvasJS.Chart("chartContainer",
-                {
-                    title: {
-                        text: "{{ stock.name }}"
-                    },
-                    axisX: {
-                        title: "Date",
-                        gridThickness: 2
-                    },
-                    axisY: {
-                        title: "Price"
-                    },
-                    data: [
-                        {
-                            type: "area",
-                            dataPoints: [//array
-                                {x: new Date(2012, 1, 1), y: 26},
 
-                            ]
-                        }
-                    ]
-                });
-            chart.render();
-        }
-    </script>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <body>
-    <div id="chartContainer" style="height: 300px; width: 100%;">
-    </div>
-    </body><br>
     {% if current_user.is_authenticated %}
         <a class="btn btn-secondary" href="{{ url_for('create_analysis', stock_id=stock.id) }}" role="button">Create Analysis</a>
     {% endif %}
