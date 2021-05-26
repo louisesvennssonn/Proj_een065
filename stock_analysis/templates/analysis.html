@@ -15,5 +15,21 @@
             <div class="col-md-4">When posted the price was:  </div>
             <div class="col-md-8">{{ analysis.price }}</div>
         </div>
+        <div class="row">
+            <div class="col-md-4">The stock´s earnings was: </div>
+            <div class="col-md-8">{{ analysis.earnings }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">The stock´s P/E value was: </div>
+            <div class="col-md-8">{{ analysis.p_e }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">And the market cap was: </div>
+            <div class="col-md-8">{{ analysis.market_cap }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">The user thought: </div>
+            <div class="col-md-8">{{ analysis.content }}</div>
+        </div>
     </div>
 {% endblock content %}
