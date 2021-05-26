@@ -37,7 +37,7 @@
                         <tr>
                             <th class="row"><a href="{{ url_for('analysis', analysis_id=analysis.id) }}">{{ analysis.id }}</a></th>
                             <td>{{ analysis.date_posted.strftime('%Y-%m-%d') }}</td>
-                            <td>{{ analysis.title }}</td>
+                            <td><a href="{{ url_for('analysis', analysis_id=analysis.id) }}">{{ analysis.title }}</a></td>
                             <td><a href="{{ url_for('stock', stock_id=analysis.stock.id) }}">{{ analysis.stock.name }}</a></td>
                         </tr>
                     {% endfor %}
