@@ -30,5 +30,10 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  margin-left: 25px;
+}
+
+.btn-success {
+  margin-left: -12.5px;
 }
 /** TODO: put here your own CSS /*
