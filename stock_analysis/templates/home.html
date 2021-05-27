@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1><b>Welcome to New Infront</b></h1>
-
     <h3>To read or add an analysis select a stock below</h3>
     <div class="container">
         <div class="stocks">
@@ -22,7 +21,7 @@
     </div>
 
     {% if current_user.is_authenticated %}
-        <h3>Here are your analyses</h3>
+        <h3>Here are your analyses ({{ analyses | length  }} Analyses)</h3>
         <table class="table">
             <thead>
                 <tr>

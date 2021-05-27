@@ -1,3 +1,4 @@
+import datetime
 import os
 import secrets
 from PIL import Image
@@ -5,7 +6,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 
 import stock_analysis.models
 from stock_analysis import app, db, bcrypt
-from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, AnalysisForm, StockForm
+from stock_analysis.forms import RegistrationForm, LoginForm, UpdateAccountForm, AnalysisForm, StockForm, DiagramForm
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -197,10 +198,39 @@ def create_analysis(stock_id):
 @app.route("/stock/<int:stock_id>", methods=['GET', 'POST'])
 def stock(stock_id):
     current_stock = Stock.query.get_or_404(stock_id)
-    data = []
+    diagrams = []
+    if 'startdate' in request.args and 'enddate' in request.args:
+        startdate = datetime.datetime.strptime(request.args['startdate'], '%Y-%m-%d')
+        enddate = datetime.datetime.strptime(request.args['enddate'], '%Y-%m-%d')
+        diagrams = Diagram.query.filter_by(stock_id=current_stock.id).filter(Diagram.date >=startdate).filter(Diagram.date <= enddate).all()
+    else:
+        diagrams = Diagram.query.filter_by(stock_id=current_stock.id).order_by(Diagram.date).all()
     return render_template('stock.html',
-                           name=current_stock.name,
                            stock=current_stock,
+                           diagrams=diagrams
+                           )
+
+@app.route("/diagram/<int:stock_id>/new-price", methods=['GET', 'POST'])
+@login_required
+def add_price(stock_id):
+    stock= Stock.query.get_or_404(stock_id)
+    form = DiagramForm()
+    if form.validate_on_submit():
+        new_price = Diagram(price=form.price.data,
+                            stock=stock)
+        db.session.add(new_price)
+        try:
+            db.session.commit()
+            flash('Your price has been added!', 'success')
+            return redirect(f'/stock/{stock.id}')
+        except:
+            flash('Something went wrong, please try again', 'danger')
+            return redirect(url_for('add_price'))
+
+    return render_template('add_price.html',
+                           title='Add Price',
+                           form=form,
+                           legend='Add Price'
                            )
 
 
@@ -208,28 +238,6 @@ def stock(stock_id):
 def analysis(analysis_id):
     current_analysis = Analysis.query.get_or_404(analysis_id)
     return render_template('analysis.html', analysis=current_analysis)
-
-
-@app.route("/stock/<int:stock_id>/update", methods=['GET', 'POST'])
-@login_required
-def update_stock(stock_id):
-    stock_to_update = Stock.query.get_or_404(stock_id)
-    if stock_to_update.author != current_user:
-        abort(403)  # only the owner of the post can edit it!
-    form = StockForm()
-    if form.validate_on_submit():
-        stock_to_update.name = form.name.data
-        stock_to_update.number_of_shares = form.number_of_shares.data
-        db.session.commit()
-        flash('Your stock has been updated!', 'success')
-        return redirect(url_for('stock', stock_id=stock_to_update.id))
-    elif request.method == 'GET':
-        form.name.data = stock_to_update.name
-        form.number_of_shares.data = stock_to_update.number_of_shares
-    return render_template('create_stock.html',
-                           title='Update Stock',
-                           form=form,
-                           legend='Update Stock')
 
 
 @app.route("/analysis/<int:analysis_id>/update", methods=['GET', 'POST'])
@@ -275,3 +283,5 @@ def delete_analysis(analysis_id):
     except:
         flash('It wasn´t possible to delete the analysis', 'danger')
     return redirect(url_for('stock', stock_id=analysis_to_delete.stock.id))
+
+

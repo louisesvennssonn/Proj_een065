@@ -80,16 +80,16 @@ def reload_database():
 
     for stock in stocks:
         for user in users:
-            for a in range(random.randint(0, 2)):
+            for a in range(random.randint(0, 10)):
                 # picking a random date for the analysis
-                date_analysis = datetime.datetime.now() - \
+                random_date = datetime.datetime.now() - \
                                 datetime.timedelta(days=random.randint(1, 90),
                                                    hours=random.randint(1, 23),
                                                    minutes=random.randint(1, 59))
                 # creating a random analysis
-                analysis = Analysis(title=lorem.words(random.randint(3, 7)),
-                                    content=lorem.paragraphs(random.randint(2, 10)),
-                                    date_posted=date_analysis,
+                analysis = Analysis(title=lorem.words(random.randint(3, 10)),
+                                    content=lorem.words(random.randint(3, 20)),
+                                    date_posted=random_date,
                                     price=random.randint(1, 1000),
                                     earnings=random.randint(1, 100000),
                                     p_e=random.randint(-5, 20),
@@ -98,7 +98,7 @@ def reload_database():
                                     stock=stock)
                 db.session.add(analysis)
 
-                diagram = Diagram(date=date_analysis, stock=stock, price=analysis.price)
+                diagram = Diagram(date=random_date, stock=stock, price=random.randint(1,1000))
                 db.session.add(diagram)
 
     try:

@@ -1,3 +1,5 @@
+import datetime
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
@@ -95,6 +97,6 @@ class AnalysisForm(FlaskForm):
 
 
 class DiagramForm(FlaskForm):
-    price = AnalysisForm.price
-    date = DateTimeField('Date', format='%Y-%m-%d %H:%M:%S')
+    price = DecimalField('Price', validators=[DataRequired()], places=2)
+    submit = SubmitField('Add')
 
