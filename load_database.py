@@ -6,6 +6,7 @@ import requests
 from stock_analysis import db, bcrypt, app
 from stock_analysis.models import User, Analysis, Stock, Diagram
 from lorem_text import lorem
+import string
 
 host = 'localhost'  # host where the system is running
 port = 5000  # port where the process is running
@@ -60,10 +61,14 @@ def reload_database():
         app.logger.exception(e)
 
     # testing if the users were added correctly
+
+    def random_char(y):
+        return ''.join(random.choice(string.ascii_letters) for x in range(y))
+
     assert len(User.query.all()) == 3, 'It seems that user failed to be inserted!'
     users = [default_user1, default_user2, default_user3]
 
-    stock_1 = Stock(name='INVESTOR', number_of_shares=random.randint(1, 100000), ticker=lorem.words(4))
+    stock_1 = Stock(name='INVESTOR', number_of_shares=random.randint(1, 100000), ticker=random_char(4).upper())
     db.session.add(stock_1)
 
     stock_2 = Stock(name='HELLO', number_of_shares=random.randint(1, 1000000), ticker=random_char(4).upper())
