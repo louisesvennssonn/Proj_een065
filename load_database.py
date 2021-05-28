@@ -66,10 +66,13 @@ def reload_database():
     stock_1 = Stock(name='INVESTOR', number_of_shares=random.randint(1, 100000), ticker=lorem.words(4))
     db.session.add(stock_1)
 
-    stock_2 = Stock(name='HELLO', number_of_shares=random.randint(1, 1000000), ticker=lorem.words(4))
+    stock_2 = Stock(name='HELLO', number_of_shares=random.randint(1, 1000000), ticker=random_char(4).upper())
     db.session.add(stock_2)
 
-    stocks = [stock_1, stock_2]
+    stock_3 = Stock(name='NIBE', number_of_shares=random.randint(1, 1000000), ticker=random_char(4).upper())
+    db.session.add(stock_3)
+
+    stocks = [stock_1, stock_2, stock_3]
 
     try:
         db.session.commit()
@@ -80,7 +83,7 @@ def reload_database():
 
     for stock in stocks:
         for user in users:
-            for a in range(random.randint(0, 10)):
+            for a in range(random.randint(1, 10)):
                 # picking a random date for the analysis
                 random_date = datetime.datetime.now() - \
                                 datetime.timedelta(days=random.randint(1, 90),
